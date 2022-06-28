@@ -72,7 +72,13 @@ public:
         DEBUGEXEC( if( !std::isfinite( real( data_3D[i][j][k] )+imag( data_3D[i][j][k] ) ) ) ERROR( name << " Not finite "<< i << "," << j << "," << k << " = " << data_3D[i][j][k] ) );
         return data_3D[i][j][k];
     };
-    
+
+    Field* clone() override {
+        auto newInstance = new cField3D(dims_);
+        newInstance->name = name;
+        newInstance->copyFrom(this);
+        return newInstance;
+    }
     
     virtual double norm2( unsigned int istart[3][2], unsigned int bufsize[3][2] ) override;
     

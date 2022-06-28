@@ -77,6 +77,18 @@ public:
         DEBUGEXEC( if( !std::isfinite( real( cdata_[idx] )+imag( cdata_[idx] ) ) ) ERROR( "Not finite "<< i << " " << j << " = " << cdata_[idx] ) );
         return cdata_[idx];
     };
+
+    void copyFrom( Field *from_field ) override
+    {
+        DEBUGEXEC( if( globalDims_!=from_field->globalDims_ ) ERROR( "Field size do not match "<< name << " " << from_field->name ) );
+        cField *from_cfield = dynamic_cast<cField*>(from_field);
+        DEBUGEXEC( if( from_cfield == NULL ) ERROR( "Cannot copy real field "<< from_field->name << " to complex field " << name ) );
+
+        for( unsigned int i=0; i< globalDims_; i++ ) {
+            ( *this )( i )=( *from_cfield )( i );
+        }
+    }
+
     //! 2D access to the linearized array (with check in DEBUG mode)
     inline std::complex<double> operator()( unsigned int i, unsigned int j ) const
     {

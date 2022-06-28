@@ -125,6 +125,7 @@ public:
     PyArrayObject *valueAt( std::vector<PyArrayObject *> ); // numpy
     PyArrayObject *valueAt( std::vector<PyArrayObject *>, double ); // numpy + time
     PyArrayObject *complexValueAt( std::vector<PyArrayObject *> ); // numpy
+    PyArrayObject *complexValueAt( std::vector<PyArrayObject *>, double ); // numpy + time
 #endif
 private:
     PyObject *py_profile;
@@ -141,6 +142,8 @@ public:
 #ifdef SMILEI_USE_NUMPY
     PyArrayObject *valueAt( std::vector<PyArrayObject *> ); // numpy
     PyArrayObject *valueAt( std::vector<PyArrayObject *> , double ); // numpy + time
+    PyArrayObject *complexValueAt( std::vector<PyArrayObject *> ); // numpy
+    PyArrayObject *complexValueAt( std::vector<PyArrayObject *>, double ); // numpy + time
 #endif
 private:
     PyObject *py_profile;

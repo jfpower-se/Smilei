@@ -1762,18 +1762,12 @@ void ElectroMagnAM::applyPrescribedFields( Patch *patch, double time )
     for (int imode=0;imode<Nmodes;imode++){
         for( vector<PrescribedField>::iterator extfield=prescribedFields.begin(); extfield!=prescribedFields.end(); extfield++ ) {
 			string name = LowerCase( extfield->savedField->name );
-			if( El_[imode] && name==LowerCase( El_[imode]->name ) ) {
-				field = El_[imode];
-			} else if( Er_[imode] && name==LowerCase( Er_[imode]->name ) ) {
-				field = Er_[imode];
-			} else if( Et_[imode] && name==LowerCase( Et_[imode]->name ) ) {
-				field = Et_[imode];
-			} else if( Bl_[imode] && name==LowerCase( Bl_[imode]->name ) ) {
-				field = Bl_[imode];
-			} else if( Br_[imode] && name==LowerCase( Br_[imode]->name ) ) {
-				field = Br_[imode];
-			} else if( Bt_[imode] && name==LowerCase( Bt_[imode]->name ) ) {
-				field = Bt_[imode];
+			if( Bl_m[imode] && name==LowerCase( Bl_m[imode]->name ) ) {
+				field = Bl_m[imode];
+			} else if( Br_m[imode] && name==LowerCase( Br_m[imode]->name ) ) {
+				field = Br_m[imode];
+			} else if( Bt_m[imode] && name==LowerCase( Bt_m[imode]->name ) ) {
+				field = Bt_m[imode];
 			} else {
 				field = NULL;
 			}
@@ -1782,9 +1776,6 @@ void ElectroMagnAM::applyPrescribedFields( Patch *patch, double time )
 				applyPrescribedField( field, extfield->profile, patch, time );
 			}
         }
-        Bl_m[imode]->copyFrom( Bl_[imode] );
-        Br_m[imode]->copyFrom( Br_[imode] );
-        Bt_m[imode]->copyFrom( Bt_[imode] );
     }
 
 }
@@ -1862,7 +1853,7 @@ void ElectroMagnAM::applyPrescribedField( Field *my_field,  Profile *profile, Pa
         }
         pos[0] += dl;
     }
-
+    
     profile->complexValuesAt( xr, *field2D, 3, time );
 
     for( unsigned int idim=0 ; idim<2 ; idim++ ) {
