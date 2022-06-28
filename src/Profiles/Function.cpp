@@ -115,7 +115,17 @@ PyArrayObject *Function_Python4D::valueAt( std::vector<PyArrayObject *> x, doubl
     PyArrayObject * ret = ( PyArrayObject * )PyObject_CallFunctionObjArgs( py_profile, x[0], x[1], x[2], t, NULL );
     Py_DECREF( t );
     return ret;
-}PyArrayObject *Function_Python4D::complexValueAt( std::vector<PyArrayObject *> x, double time )
+}
+PyArrayObject *Function_Python3D::complexValueAt( std::vector<PyArrayObject *> x, double time)
+{
+    PyObject *t = PyFloat_FromDouble( time );
+    PyObject *values = PyObject_CallFunctionObjArgs( py_profile, x[0], x[1], t, NULL );
+    Py_DECREF( t );
+    PyArrayObject *cvalues = ( PyArrayObject * )PyObject_CallMethod( values, const_cast<char *>("astype"), const_cast<char *>("s"), const_cast<char *>("complex"), NULL );
+    Py_DECREF( values );
+    return cvalues;
+}
+PyArrayObject *Function_Python4D::complexValueAt( std::vector<PyArrayObject *> x, double time )
 {
     PyObject *t = PyFloat_FromDouble( time );
     PyObject * values = PyObject_CallFunctionObjArgs( py_profile, x[0], x[1], x[2], t, NULL );
