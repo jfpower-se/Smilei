@@ -791,12 +791,6 @@ Params::Params( SmileiMPI *smpi, std::vector<std::string> namelistsFiles ) :
                 WARNING("For collisions, vectorization activated for cell sorting capability. Disabled vectorization not compatible with cell sorting for the moment.")
             }
         }
-        
-        if( geometry!="1Dcartesian"
-                && geometry!="2Dcartesian"
-                && geometry!="3Dcartesian" ) {
-            ERROR_NAMELIST( "Collisions only valid for cartesian geometries for the moment",  LINK_NAMELIST + std::string("#collisions-reactions") );
-        }
 
         if( vectorization_mode == "adaptive_mixed_sort" ) {
             ERROR_NAMELIST( "Collisions are incompatible with the vectorization mode 'adaptive_mixed_sort'.",  LINK_NAMELIST + std::string("#collisions-reactions") );

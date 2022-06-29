@@ -25,8 +25,39 @@ public:
     //! of one cell at the position of a given particle
     double getPrimalCellVolume( Particles *p, unsigned int ipart, Params &params ) override final
     {
-        ERROR( "getPrimalCellVolume not implemented in geometry AM" );
-        return cell_volume;
+        double factor = 1.;
+        
+        // The cell index in radial direction
+        int cell_radius_i = (int)(p->position(1,ipart) / params.cell_length[1]);
+
+        // The radius of the cell's centroid
+        double cell_centroid_radius = params.cell_length[1] * (cell_radius_i + 0.5);
+
+        double halfcell = 0.5 * params.cell_length[0];
+        if( p->position(0,ipart) - getDomainLocalMin(0) < halfcell
+         || getDomainLocalMax(0) - p->position(0,ipart) < halfcell ) {
+             factor *= 0.5;
+        }
+        
+        halfcell = 0.5 * params.cell_length[1];
+        if( p->position(1,ipart) - getDomainLocalMin(1) < halfcell) {
+             factor *= 0.5;
+             // The innermost cell is split in half, keeping only the outer half cell. Thus,
+             // the centroid is at cell_radius_i + 0.75
+             cell_centroid_radius = params.cell_length[1] * (cell_radius_i + 0.75);
+        }
+        else if (getDomainLocalMax(1) - p->position(1,ipart) < halfcell ) {
+             factor *= 0.5;
+             // The outermost cell is split in half, keeping only the inner half cell. Thus,
+             // the centroid is at cell_radius_i + 0.25
+             cell_centroid_radius = params.cell_length[1] * (cell_radius_i + 0.25);
+        }
+        
+
+        // Assuming that the cell_volume is in fact a surface for AM...
+        // According to Pappus' second theorem, the volume is the area times the circumference of the
+        // cell centroid.
+        return factor * cell_volume * 2 * M_PI * cell_centroid_radius;
     };
     
     //! Given several arrays (x,y,z), return indices of points in patch
